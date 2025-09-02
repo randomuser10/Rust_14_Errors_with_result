@@ -1,25 +1,17 @@
+use std::fs::File;
+use std::io::ErrorKind;
 
-use std::{fs::{ File}, io::{ErrorKind}};
+fn main(){
+    let greeting_file = File::open("hello.txt");
 
-fn main() {
-    let read_file = File::open("hello.txt");
-    // read_file.expect("msg");
-    // println!("{:?}", read_file);
-
-    let greeting_file = match read_file {
+    let _greeting_check = match greeting_file {
         Ok(file) => file,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => match File::create("hello.txt") {
-                Ok(fc) => fc,
-                Err(e) => panic!("Error creating file: {e:?}"),                
+                Ok(fs) => fs,
+                Err(e) => panic!("Failed to create file {e:?}"),                
             },
-            _ => {
-                panic!("Error reading the file")
-            }
-        },        
+            _ => panic!("Failed to read the file"),
+        }       
     };
-    println!("{:?}", greeting_file);
-    // println!("{:?}", &read_file);
 }
-
-    
